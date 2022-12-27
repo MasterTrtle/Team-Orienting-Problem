@@ -25,10 +25,15 @@ def read_map_file(file_path):
     # map is a rectangle, lenght = max x, width = max y
     map = [[0 for i in range(max([x[1] for x in map_data]) + 1)] for j in range(max([x[0] for x in map_data]) + 1)]
 
-    # the starting point is the first point in the map_data
-    map[map_data[0][0]][map_data[0][1]] = "S"
-    # the ending point is the last point in the map_data
-    map[map_data[-1][0]][map_data[-1][1]] = "E"
+    if map_data[0][0] == map_data[-1][0] and map_data[0][1] == map_data[-1][1]:
+        #if starting and ending point are the same
+        map[map_data[0][0]][map_data[0][1]] = "B"
+    else:
+        # the starting point is the first point in the map_data
+        map[map_data[0][0]][map_data[0][1]] = "S"
+        # the ending point is the last point in the map_data
+        map[map_data[-1][0]][map_data[-1][1]] = "E"
+
     for i in map_data[1:-1]:
         map[i[0]][i[1]] = i[2]
 
