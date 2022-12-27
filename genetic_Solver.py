@@ -38,6 +38,7 @@ def get_distance(graph, vehicule):
 def get_start_end(graph):
     # get the start and end nodes
     for node in graph.nodes:
+        print(graph.nodes[node]['score'])
         if graph.nodes[node]['score'] == "S":
             start = node
         elif graph.nodes[node]['score'] == "E":
@@ -242,7 +243,14 @@ def mutation(agent, graph):
     index1 = random.randint(0, len(agent) - 1)
     vehicule = agent[index1].copy()
 
-    index = random.randint(1, len(vehicule) - 3)
+
+    if len(vehicule)-3 >= 1:
+        #print("vehicule: " + str(len(vehicule)-3)) #debug
+        index = random.randint(1, len(vehicule) - 3)
+    else:
+        index = 1
+
+    
     # switch the two nodes
     vehicule[index], vehicule[index + 1] = vehicule[index + 1], vehicule[index]
 
@@ -262,13 +270,26 @@ def mutation2(agent, graph):
     index1 = random.randint(0, len(agent) - 1)
     vehicule = new_agent[index1].copy()
 
-    #chose a random node using index
-    index = random.randint(1, len(vehicule) - 2)
+
+    if len(vehicule)-2 >= 1:
+        #chose a random node using index
+        #print("vehicule: " + str(len(vehicule)-2)) #debug
+        index = random.randint(1, len(vehicule) - 2)
+    else:
+        index = 1
+
+    
+    
     node = vehicule[index]
     #remove the node
     vehicule.remove(node)
-    #chose a random position using index
-    index = random.randint(1, len(vehicule) - 2)
+
+    if len(vehicule)-2 >= 1:
+        #chose a random position using index
+        index = random.randint(1, len(vehicule) - 2)
+    else:
+        index = 1
+    
     #insert the node in the new position
     vehicule.insert(index, node)
     #if the new vehicule take a shorter path, replace the old one
