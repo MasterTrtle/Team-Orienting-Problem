@@ -38,7 +38,7 @@ def get_distance(graph, vehicule):
 def get_start_end(graph):
     # get the start and end nodes
     for node in graph.nodes:
-        print(graph.nodes[node]['score'])
+        #print(graph.nodes[node]['score'])
         if graph.nodes[node]['score'] == "S":
             start = node
         elif graph.nodes[node]['score'] == "E":
