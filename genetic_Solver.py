@@ -12,7 +12,7 @@ def get_score(graph, vehicule):
     # return the score of the path except the start and the end
     score = 0
     for node in vehicule:
-        if graph.nodes[node]['score'] != "S" and graph.nodes[node]['score'] != "E":
+        if graph.nodes[node]['score'] != "S" and graph.nodes[node]['score'] != "E" and graph.nodes[node]['score'] != "B":
             score += graph.nodes[node]['score']
     return score
 
@@ -29,8 +29,12 @@ def get_distance(graph, vehicule):
     # return the distance of the agent
 
     distance = 0
-    for i in range(len(vehicule) - 1):
-        distance += graph[vehicule[i]][vehicule[i + 1]]['weight']
+    try:
+        for i in range(len(vehicule) - 1):
+            distance += graph[vehicule[i]][vehicule[i + 1]]['weight']
+    except KeyError:
+        return 99999999999
+
     return distance
 
 
@@ -246,19 +250,18 @@ def mutation(agent, graph):
 
     if len(vehicule)-3 >= 1:
         #print("vehicule: " + str(len(vehicule)-3)) #debug
-        index = random.randint(1, len(vehicule) - 3)
-    else:
-        index = 1
+        index = random.randint(1, len(vehicule) - 3) 
+        # switch the two nodes
+        vehicule[index], vehicule[index + 1] = vehicule[index + 1], vehicule[index]
 
-    
-    # switch the two nodes
-    vehicule[index], vehicule[index + 1] = vehicule[index + 1], vehicule[index]
-
-    # if the new vehicule take a shorter path, replace the old one
-    if get_distance(graph, vehicule) < get_distance(graph, agent[index1]):
-        # print("the vehicule ", new_agent, " has been mutated")
-        # print("mutation, we swape the nodes ", vehicule[index], " and ", vehicule[index + 1])
-        new_agent[index1] = vehicule
+    try:
+        # if the new vehicule take a shorter path, replace the old one
+        if get_distance(graph, vehicule) < get_distance(graph, agent[index1]):
+            # print("the vehicule ", new_agent, " has been mutated")
+            # print("mutation, we swape the nodes ", vehicule[index], " and ", vehicule[index + 1])
+            new_agent[index1] = vehicule
+    except KeyError:
+        pass
 
     return new_agent
 
@@ -275,28 +278,27 @@ def mutation2(agent, graph):
         #chose a random node using index
         #print("vehicule: " + str(len(vehicule)-2)) #debug
         index = random.randint(1, len(vehicule) - 2)
-    else:
-        index = 1
-
     
     
-    node = vehicule[index]
-    #remove the node
-    vehicule.remove(node)
-
+        node = vehicule[index]
+        #remove the node
+        vehicule.remove(node)
+        
     if len(vehicule)-2 >= 1:
+
         #chose a random position using index
         index = random.randint(1, len(vehicule) - 2)
-    else:
-        index = 1
-    
-    #insert the node in the new position
-    vehicule.insert(index, node)
-    #if the new vehicule take a shorter path, replace the old one
-    if get_distance(graph, vehicule) < get_distance(graph, agent[index1]):
-        #print("the vehicule ", new_agent, " has been mutated")
-        #print("mutation, we swape the nodes ", vehicule[index], " and ", vehicule[index + 1])
-        new_agent[index1] = vehicule
+   
+        #insert the node in the new position
+        vehicule.insert(index, node)
+        try:
+            #if the new vehicule take a shorter path, replace the old one
+            if get_distance(graph, vehicule) < get_distance(graph, agent[index1]):
+                #print("the vehicule ", new_agent, " has been mutated")
+                #print("mutation, we swape the nodes ", vehicule[index], " and ", vehicule[index + 1])
+                new_agent[index1] = vehicule
+        except KeyError:
+            pass
 
     return new_agent
 
